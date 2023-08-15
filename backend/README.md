@@ -85,7 +85,7 @@ Once you have successfully started the Flask development server and the Trivia A
                "id": 2,
                "type": "History"
            },
-           // ...
+            
        ]
    }
    ```
@@ -118,13 +118,13 @@ Once you have successfully started the Flask development server and the Trivia A
                "category": 1,
                "difficulty": 2
            },
-           // ...
+            
        ],
        "total_questions": 20,
        "categories": {
            "1": "Science",
            "2": "History",
-           // ...
+            
        },
        "current_category": null
    }
