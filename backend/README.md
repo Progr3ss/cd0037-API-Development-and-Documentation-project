@@ -48,47 +48,251 @@ flask run --reload
 
 The `--reload` flag will detect file changes and restart the server automatically.
 
-## To Do Tasks
 
-These are the files you'd want to edit in the backend:
 
-1. `backend/flaskr/__init__.py`
-2. `backend/test_flaskr.py`
 
-One note before you delve into your tasks: for each endpoint, you are expected to define the endpoint and response data. The frontend will be a plentiful resource because it is set up to expect certain endpoints and response data formats already. You should feel free to specify endpoints in your own way; if you do so, make sure to update the frontend or you will get some unexpected behavior.
+### Usage
+Once the server is up and running, you can use the Trivia API to interact with the trivia question database. The API provides the following endpoints:
 
-1. Use Flask-CORS to enable cross-domain requests and set response headers.
-2. Create an endpoint to handle `GET` requests for questions, including pagination (every 10 questions). This endpoint should return a list of questions, number of total questions, current category, categories.
-3. Create an endpoint to handle `GET` requests for all available categories.
-4. Create an endpoint to `DELETE` a question using a question `ID`.
-5. Create an endpoint to `POST` a new question, which will require the question and answer text, category, and difficulty score.
-6. Create a `POST` endpoint to get questions based on category.
-7. Create a `POST` endpoint to get questions based on a search term. It should return any questions for whom the search term is a substring of the question.
-8. Create a `POST` endpoint to get questions to play the quiz. This endpoint should take a category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions.
-9. Create error handlers for all expected errors including 400, 404, 422, and 500.
 
-## Documenting your Endpoints
 
-You will need to provide detailed documentation of your API endpoints including the URL, request parameters, and the response body. Use the example below as a reference.
 
-### Documentation Example
+## Usage
 
-`GET '/api/v1.0/categories'`
+Once you have successfully started the Flask development server and the Trivia API is running, you can interact with the API using various endpoints to perform different actions on the trivia question database. Below are details about each available endpoint and how to use them.
 
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
+### Endpoints
 
-```json
-{
-  "1": "Science",
-  "2": "Art",
-  "3": "Geography",
-  "4": "History",
-  "5": "Entertainment",
-  "6": "Sports"
-}
-```
+1. **GET /categories**
+
+   This endpoint allows you to retrieve a list of all available categories.
+
+   **Example Request:**
+   ```
+   GET /categories
+   ```
+
+   **Example Response:**
+   ```json
+   {
+       "success": true,
+       "categories": [
+           {
+               "id": 1,
+               "type": "Science"
+           },
+           {
+               "id": 2,
+               "type": "History"
+           },
+           // ...
+       ]
+   }
+   ```
+
+2. **GET /questions?page=page_number**
+
+   Retrieve a paginated list of trivia questions. Each page contains 10 questions.
+
+   **Example Request:**
+   ```
+   GET /questions?page=2
+   ```
+
+   **Example Response:**
+   ```json
+   {
+       "success": true,
+       "questions": [
+           {
+               "id": 11,
+               "question": "What is the capital of France?",
+               "answer": "Paris",
+               "category": 3,
+               "difficulty": 2
+           },
+           {
+               "id": 12,
+               "question": "Which planet is known as the Red Planet?",
+               "answer": "Mars",
+               "category": 1,
+               "difficulty": 2
+           },
+           // ...
+       ],
+       "total_questions": 20,
+       "categories": {
+           "1": "Science",
+           "2": "History",
+           // ...
+       },
+       "current_category": null
+   }
+   ```
+
+3. **DELETE /questions/:question_id**
+
+   Delete a question by its ID.
+
+   **Example Request:**
+   ```
+   DELETE /questions/5
+   ```
+
+   **Example Response:**
+   ```json
+   {
+       "success": true,
+       "deleted": 5
+   }
+   ```
+
+4. **POST /questions**
+
+   Add a new question to the database.
+
+   **Example Request:**
+   ```json
+   POST /questions
+   {
+       "question": "What is the largest mammal?",
+       "answer": "Blue Whale",
+       "category": 1,
+       "difficulty": 3
+   }
+   ```
+
+   **Example Response:**
+   ```json
+   {
+       "success": true,
+       "created": 21
+   }
+   ```
+
+5. **POST /questions/search**
+
+   Search for questions using a search term.
+
+   **Example Request:**
+   ```json
+   POST /questions/search
+   {
+       "searchTerm": "capital"
+   }
+   ```
+
+   **Example Response:**
+   ```json
+   {
+       "success": true,
+       "questions": [
+           {
+               "id": 11,
+               "question": "What is the capital of France?",
+               "answer": "Paris",
+               "category": 3,
+               "difficulty": 2
+           }
+       ],
+       "total_questions": 1,
+       "current_category": null
+   }
+   ```
+
+6. **GET /categories/:category_id/questions**
+
+   Get a list of questions belonging to a specific category.
+
+   **Example Request:**
+   ```
+   GET /categories/2/questions
+   ```
+
+   **Example Response:**
+   ```json
+   {
+       "success": true,
+       "questions": [
+           {
+               "id": 6,
+               "question": "Which ancient civilization built the pyramids?",
+               "answer": "Egyptians",
+               "category": 2,
+               "difficulty": 2
+           },
+           {
+               "id": 7,
+               "question": "Who was the first President of the United States?",
+               "answer": "George Washington",
+               "category": 2,
+               "difficulty": 1
+           }
+       ],
+       "total_questions": 2,
+       "current_category": "History"
+   }
+   ```
+
+7. **POST /quizzes**
+
+   Get a random question for playing a quiz.
+
+   **Example Request:**
+   ```json
+   POST /quizzes
+   {
+       "previous_questions": [1, 2, 3],
+       "quiz_category": {"id": 1, "type": "Science"}
+   }
+   ```
+
+   **Example Response:**
+   ```json
+   {
+       "success": true,
+       "question": {
+           "id": 4,
+           "question": "What is the chemical symbol for gold?",
+           "answer": "Au",
+           "category": 1,
+           "difficulty": 2
+       }
+   }
+   ```
+
+### Error Handling
+
+The Trivia API provides error handling for specific HTTP status codes to help you understand and troubleshoot issues that might arise during API usage.
+
+- **404: Resource not found**
+
+  If the requested resource (endpoint) does not exist, you will receive a 404 error along with an error message.
+
+  **Example Response:**
+  ```json
+  {
+      "success": false,
+      "error": "Not found"
+  }
+  ```
+
+- **422: Unprocessable entity**
+
+  If there is an issue with the data you provided in the request, resulting in the inability to process the request, you will receive a 422 error along with an error message.
+
+  **Example Response:**
+  ```json
+  {
+      "success": false,
+      "error": "Unprocessable entity"
+  }
+  ```
+
+
+
+
+
 
 ## Testing
 
